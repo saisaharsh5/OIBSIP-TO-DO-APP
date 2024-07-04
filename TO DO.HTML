@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333333;
+        }
+
+        .input-section {
+            margin-bottom: 20px;
+        }
+
+        .input-section input {
+            padding: 10px;
+            width: 70%;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .input-section button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #5cb85c;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .input-section button:hover {
+            background-color: #4cae4c;
+        }
+
+        .task-list {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .task-list h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            color: #5cb85c;
+        }
+
+        .task-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-list li.completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <div class="input-section">
+            <input type="text" id="new-task" placeholder="Add a new task...">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+        <div class="task-list">
+            <h2>Pending Tasks</h2>
+            <ul id="pending-tasks"></ul>
+        </div>
+        <div class="task-list">
+            <h2>Completed Tasks</h2>
+            <ul id="completed-tasks"></ul>
+        </div>
+    </div>
+    <script>
+        function addTask() {
+            const taskInput = document.getElementById('new-task');
+            const taskText = taskInput.value.trim();
+            if (taskText) {
+                const pendingTasks = document.getElementById('pending-tasks');
+                const taskItem = createTaskItem(taskText);
+                pendingTasks.appendChild(taskItem);
+                taskInput.value = '';
+            }
+        }
+
+        function createTaskItem(text) {
+            const li = document.createElement('li');
+            li.innerText = text;
+
+            const actions = document.createElement('div');
+
+            const completeButton = document.createElement('button');
+            completeButton.innerText = 'Complete';
+            completeButton.onclick = () => completeTask(li);
+
+            const editButton = document.createElement('button');
+            editButton.innerText = 'Edit';
+            editButton.onclick = () => editTask(li);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.innerText = 'Delete';
+            deleteButton.onclick = () => deleteTask(li);
+
+            actions.appendChild(completeButton);
+            actions.appendChild(editButton);
+            actions.appendChild(deleteButton);
+
+            li.appendChild(actions);
+            return li;
+        }
+
+        function completeTask(taskItem) {
+            taskItem.classList.add('completed');
+            const completedTasks = document.getElementById('completed-tasks');
+            completedTasks.appendChild(taskItem);
+            taskItem.querySelector('button').remove(); // Remove complete button
+        }
+
+        function editTask(taskItem) {
+            const newTaskText = prompt('Edit task:', taskItem.firstChild.textContent);
+            if (newTaskText) {
+                taskItem.firstChild.textContent = newTaskText;
+            }
+        }
+
+        function deleteTask(taskItem) {
+            taskItem.remove();
+        }
+    </script>
+</body>
+</html>
